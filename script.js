@@ -1,55 +1,60 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. MENU RESPONSIVO (HAMBÚRGUER)
+    const navbar = document.querySelector('.navbar');
     
-    // --- 1. MENU RESPONSIVO (HAMBÚRGUER) ---
-    const mobileMenuBtn = document.getElementById('mobile-menu');
-    const navMenu = document.getElementById('nav-menu');
-    const navLinks = document.querySelectorAll('#nav-menu a');
+    // Cria o botão do menu dinamicamente para mobile
+    const menuToggle = document.createElement('div');
+    menuToggle.classList.add('menu-toggle');
+    menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+    
+    // Insere o botão antes do menu de navegação
+    const nav = document.querySelector('nav');
+    navbar.insertBefore(menuToggle, nav);
 
-    // Abre e fecha o menu ao clicar no botão de barras
-    mobileMenuBtn.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        
-        // Altera o ícone entre barras e "X" quando aberto
-        const icon = mobileMenuBtn.querySelector('i');
-        if (navMenu.classList.contains('active')) {
-            icon.classList.replace('fa-bars', 'fa-xmark');
+    // Evento de clique para abrir/fechar o menu
+    menuToggle.addEventListener('click', () => {
+        nav.classList.toggle('active');
+        // Alterna o ícone entre barras e "X"
+        const icon = menuToggle.querySelector('i');
+        if (nav.classList.contains('active')) {
+            icon.className = 'fa-solid fa-xmark';
         } else {
-            icon.classList.replace('fa-xmark', 'fa-bars');
+            icon.className = 'fa-solid fa-bars';
         }
     });
 
-    // Fecha o menu automaticamente ao clicar em qualquer link (para rolar até a seção)
+    // Fecha o menu ao clicar em qualquer link (melhor experiência do usuário)
+    const navLinks = document.querySelectorAll('nav ul li a');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            mobileMenuBtn.querySelector('i').classList.replace('fa-xmark', 'fa-bars');
+            nav.classList.remove('active');
+            menuToggle.querySelector('i').className = 'fa-solid fa-bars';
         });
     });
 
-
-    // --- 2. VALIDAÇÃO E ENVIO DO FORMULÁRIO ---
+    // 2. VALIDAÇÃO E ENVIO DO FORMULÁRIO DE CONTATO
     const form = document.querySelector('.contact-form');
-
+    
     if (form) {
-        form.addEventListener('submit', (event) => {
-            // Evita o recarregamento padrão da página ao enviar
-            event.preventDefault();
-
-            // Pega os valores dos campos
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // Impede o recarregamento da página
+            
+            // Captura os dados dos campos
             const nome = form.querySelector('input[type="text"]').value.trim();
             const email = form.querySelector('input[type="email"]').value.trim();
             const mensagem = form.querySelector('textarea').value.trim();
 
             // Validação simples
-            if (nome === '' || email === '' || mensagem === '') {
-                alert('Por favor, preencha todos os campos antes de enviar.');
+            if (nome === "" || email === "" || mensagem === "") {
+                alert("Por favor, preencha todos os campos antes de enviar.");
                 return;
             }
 
             // Simulação de envio bem-sucedido
-            alert(`Obrigado pelo contato, ${nome}! Sua mensagem sobre sustentabilidade no agro foi enviada com sucesso.`);
+            // Em um cenário real, aqui você usaria a função 'fetch' para enviar os dados ao servidor
+            alert(`Obrigado pelo contato, ${nome}! Sua mensagem sobre sustentabilidade no agro foi recebida com sucesso.`);
             
-            // Limpa o formulário após o envio
+            // Limpa o formulário
             form.reset();
         });
     }
